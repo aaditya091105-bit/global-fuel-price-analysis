@@ -1,0 +1,1090 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071525">
+  <title>Global Fuel Analytics | Energy Intelligence</title>
+
+  <script>
+    (() => {
+      try {
+        const saved = localStorage.getItem("fuel-theme");
+        if (saved === "light" || saved === "dark") {
+          document.documentElement.dataset.theme = saved;
+        }
+      } catch (_) {}
+    })();
+  </script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #071525;
+      --bg-soft: #0a1b2d;
+      --surface: #0d2034;
+      --surface-2: #112940;
+      --text: #f4f8ff;
+      --muted: #a4b5c8;
+      --line: #244159;
+      --accent: #38bdf8;
+      --accent-2: #67e8f9;
+      --nav-bg: rgba(7, 21, 37, .86);
+      --hero-glow: rgba(14, 165, 233, .15);
+      --shadow: 0 20px 60px rgba(0, 0, 0, .18);
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f4f8fc;
+      --bg-soft: #eaf2f9;
+      --surface: #ffffff;
+      --surface-2: #eef6fb;
+      --text: #14283c;
+      --muted: #5b7084;
+      --line: #d4e2ed;
+      --accent: #0878be;
+      --accent-2: #087e91;
+      --nav-bg: rgba(255, 255, 255, .88);
+      --hero-glow: rgba(14, 165, 233, .13);
+      --shadow: 0 20px 60px rgba(34, 67, 92, .09);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 88px;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      line-height: 1.65;
+      transition: background .3s, color .3s;
+    }
+
+    body, button, a, article, header, section {
+      transition-property: background-color, color, border-color, box-shadow;
+      transition-duration: .25s;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    .wrap {
+      width: min(1200px, calc(100% - 40px));
+      margin: auto;
+    }
+
+    /* Navigation */
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      font-size: .95rem;
+      font-weight: 850;
+      letter-spacing: .5px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #061525;
+      font-size: 1.5rem;
+      box-shadow: 0 6px 22px var(--hero-glow);
+    }
+
+    .brand span:last-child em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: .88rem;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .theme-toggle, .menu-toggle {
+      min-width: 43px;
+      height: 43px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 11px;
+    }
+
+    .theme-toggle { padding: 0 12px; }
+    .theme-toggle span { font-size: 1.05rem; }
+    .menu-toggle { display: none; padding: 0 12px; }
+
+    /* Hero */
+
+    .hero {
+      min-height: 680px;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      background:
+        radial-gradient(ellipse at 76% 45%, var(--hero-glow), transparent 56%),
+        var(--bg);
+    }
+
+    .map-image {
+      position: absolute;
+      z-index: -3;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 25px 0;
+      opacity: .2;
+      filter: invert(1) sepia(.35) saturate(1.8) hue-rotate(155deg);
+      pointer-events: none;
+      animation: mapDrift 32s ease-in-out infinite alternate;
+    }
+
+    html[data-theme="light"] .map-image {
+      opacity: .23;
+      filter: sepia(.12) saturate(1.2) hue-rotate(160deg);
+    }
+
+    .hero-shade {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background: linear-gradient(
+        90deg,
+        var(--bg) 0%,
+        color-mix(in srgb, var(--bg) 86%, transparent) 38%,
+        color-mix(in srgb, var(--bg) 30%, transparent) 100%
+      );
+    }
+
+    .route-svg {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: .8;
+    }
+
+    .route-line {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1.5;
+      stroke-dasharray: 7 11;
+      animation: routeTravel 24s linear infinite;
+    }
+
+    .route-dot {
+      fill: var(--accent-2);
+      stroke: var(--text);
+      stroke-width: 2;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: pointPulse 2.6s ease-in-out infinite;
+    }
+
+    .route-dot:nth-child(2) { animation-delay: .4s; }
+    .route-dot:nth-child(3) { animation-delay: .8s; }
+    .route-dot:nth-child(4) { animation-delay: 1.2s; }
+    .route-dot:nth-child(5) { animation-delay: 1.6s; }
+
+    .hero-content {
+      width: min(770px, 100%);
+      padding: 105px 0 125px;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px;
+      border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+      border-radius: 50px;
+      color: var(--accent);
+      background: var(--surface);
+      font-size: .73rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 12px #22c55e;
+      animation: livePulse 1.8s infinite;
+    }
+
+    h1 {
+      font-size: clamp(3.3rem, 7.7vw, 6.7rem);
+      letter-spacing: -.065em;
+      line-height: .99;
+      margin: 28px 0 24px;
+      font-weight: 850;
+    }
+
+    h1 .gradient-text {
+      background: linear-gradient(100deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-description {
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 12px 18px;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+      font-size: .88rem;
+      font-weight: 750;
+    }
+
+    .btn-primary {
+      background: linear-gradient(120deg, #0284c7, #0891b2);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 8px 25px rgba(2, 132, 199, .2);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .btn:hover { transform: translateY(-3px); }
+
+    .map-caption {
+      position: absolute;
+      right: 4%;
+      bottom: 26px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 50px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: .67rem;
+      font-weight: 750;
+      letter-spacing: 1.3px;
+    }
+
+    /* Sections */
+
+    .section { padding: 88px 0; }
+    .section-alt { background: var(--bg-soft); }
+
+    .section-heading { margin-bottom: 35px; }
+
+    .section-tag {
+      color: var(--accent);
+      font-size: .74rem;
+      font-weight: 850;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      font-size: clamp(2.05rem, 4.2vw, 3.2rem);
+      line-height: 1.14;
+      letter-spacing: -.045em;
+      margin: 10px 0 14px;
+    }
+
+    .section-heading p {
+      max-width: 780px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .info-card {
+      padding: 26px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      background: var(--surface-2);
+      border-radius: 13px;
+      font-size: 1.45rem;
+      margin-bottom: 18px;
+    }
+
+    .info-card h3 { margin: 0 0 10px; }
+    .info-card p { margin: 0; color: var(--muted); font-size: .94rem; }
+
+    .info-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--accent);
+      font-size: 1.25rem;
+    }
+
+    .stat span { color: var(--muted); font-size: .85rem; }
+
+    /* Tableau */
+
+    .tableau-panel {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .panel-heading h3 { margin: 0; font-size: 1.12rem; }
+    .panel-heading p { margin: 4px 0 0; color: var(--muted); font-size: .87rem; }
+
+    .tableau-frame {
+      width: 100%;
+      min-height: 1050px;
+      overflow: hidden;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .tableau-frame iframe {
+      display: block;
+      width: 100%;
+      height: 1050px;
+      border: 0;
+      background: white;
+    }
+
+    .tableau-frame.story-frame,
+    .tableau-frame.story-frame iframe {
+      min-height: 760px;
+      height: 760px;
+    }
+
+    .tableau-note {
+      margin: 13px 0 0;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    /* Story tabs */
+
+    .story-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .story-tab {
+      text-align: left;
+      padding: 17px;
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+    }
+
+    .story-tab strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .story-tab span { font-size: .82rem; }
+
+    .story-tab:hover,
+    .story-tab.active {
+      background: var(--surface-2);
+      border-color: var(--accent);
+    }
+
+    .story-tab.active {
+      box-shadow: inset 0 -3px var(--accent);
+    }
+
+    .story-panel {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .story-panel[hidden] { display: none !important; }
+
+    .story-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .story-header h3 { margin: 0; }
+    .story-header p { margin: 4px 0 0; color: var(--muted); font-size: .88rem; }
+
+    /* Footer */
+
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--line);
+      padding: 28px 0;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* CSS fallback animations */
+
+    @keyframes mapDrift {
+      from { transform: scale(1) translateX(-.4%); }
+      to { transform: scale(1.08) translateX(.5%); }
+    }
+
+    @keyframes routeTravel {
+      to { stroke-dashoffset: -360; }
+    }
+
+    @keyframes pointPulse {
+      0%, 100% { opacity: .7; transform: scale(.85); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+
+    @keyframes livePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,.4); }
+      70% { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+    }
+
+    @media (max-width: 850px) {
+      .nav-links { gap: 14px; }
+      .cards { grid-template-columns: 1fr 1fr; }
+      .story-tabs { grid-template-columns: 1fr; }
+      .hero { min-height: 600px; }
+    }
+
+    @media (max-width: 650px) {
+      .wrap { width: calc(100% - 28px); }
+      .nav { min-height: 65px; }
+      .menu-toggle { display: inline-flex; }
+      .nav-right { gap: 8px; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 65px;
+        left: 0;
+        right: 0;
+        padding: 18px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--line);
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav-links.open { display: flex; }
+      .nav-links a { display: block; padding: 8px; }
+      .theme-toggle { min-width: 40px; padding: 0 10px; }
+      .hero { min-height: 590px; }
+      .hero-content { padding: 75px 0 95px; }
+      h1 { letter-spacing: -.05em; }
+      .hero-description { font-size: 1rem; }
+      .section { padding: 60px 0; }
+      .cards, .stats { grid-template-columns: 1fr; }
+      .tableau-panel { padding: 9px; }
+      .tableau-frame, .tableau-frame iframe {
+        min-height: 760px;
+        height: 760px;
+      }
+
+      .tableau-frame.story-frame,
+      .tableau-frame.story-frame iframe {
+        min-height: 650px;
+        height: 650px;
+      }
+
+      .story-panel { padding: 10px; }
+      .map-caption { right: 12px; bottom: 12px; font-size: .56rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="wrap nav">
+    <a href="#home" class="brand">
+      <span class="brand-mark">⌁</span>
+      <span>GLOBAL FUEL <em>ANALYTICS</em></span>
+    </a>
+
+    <div class="nav-right">
+      <nav aria-label="Main navigation">
+        <div class="nav-links" id="navLinks">
+          <a href="#home">Home</a>
+          <a href="#overview">Overview</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#stories">Stories</a>
+        </div>
+      </nav>
+
+      <button class="theme-toggle" id="themeToggle"
+              type="button" aria-label="Switch color theme"
+              aria-pressed="false">
+        <span id="themeIcon" aria-hidden="true">☀️</span>
+        <span id="themeLabel">Light</span>
+      </button>
+
+      <button class="menu-toggle" id="menuToggle"
+              type="button" aria-label="Open navigation"
+              aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <img
+      class="map-image"
+      src="https://commons.wikimedia.org/wiki/Special:Redirect/file/WorldMap.svg"
+      alt=""
+      aria-hidden="true">
+
+    <div class="hero-shade"></div>
+
+    <svg class="route-svg" viewBox="0 0 1440 680"
+         preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g class="route-line">
+        <path d="M160 230 Q340 70 520 235 T850 210 T1220 250"/>
+        <path d="M520 235 Q590 370 700 310 T950 355 T1220 250"/>
+        <path d="M700 310 Q760 175 850 210"/>
+        <path d="M160 230 Q250 410 430 360 T700 310"/>
+      </g>
+      <g>
+        <circle class="route-dot" cx="160" cy="230" r="5"/>
+        <circle class="route-dot" cx="520" cy="235" r="5"/>
+        <circle class="route-dot" cx="700" cy="310" r="5"/>
+        <circle class="route-dot" cx="850" cy="210" r="5"/>
+        <circle class="route-dot" cx="950" cy="355" r="5"/>
+        <circle class="route-dot" cx="1220" cy="250" r="5"/>
+      </g>
+    </svg>
+
+    <div class="wrap">
+      <div class="hero-content">
+        <div class="eyebrow hero-anim">
+          <span class="live-dot"></span>
+          Global energy intelligence
+        </div>
+
+        <h1 class="hero-anim">
+          The world runs<br>
+          on energy.<br>
+          <span class="gradient-text">Understand it.</span>
+        </h1>
+
+        <p class="hero-description hero-anim">
+          Explore global petrol, diesel and LPG prices, compare taxation
+          across countries, and discover energy-market patterns from 2020
+          to 2026 through interactive Tableau visualizations.
+        </p>
+
+        <div class="hero-actions hero-anim">
+          <a class="btn btn-primary" href="#dashboard">Explore dashboard ↗</a>
+          <a class="btn btn-secondary" href="#stories">Explore the stories ↓</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-caption">
+      <span class="live-dot"></span>
+      GLOBAL ENERGY NETWORK · 2020—2026
+    </div>
+  </section>
+
+  <section class="section" id="overview">
+    <div class="wrap">
+      <div class="section-heading reveal">
+        <span class="section-tag">Project overview</span>
+        <h2>More than just a fuel price.</h2>
+        <p>
+          This project examines how fuel prices and taxation vary across
+          countries. Use the dashboard and stories to explore the data,
+          compare trends, and develop evidence-based observations.
+        </p>
+      </div>
+
+      <div class="cards">
+        <article class="info-card reveal">
+          <div class="card-icon">🌍</div>
+          <h3>Global comparison</h3>
+          <p>
+            Compare countries and regions to explore differences in fuel
+            prices and the factors that may influence them.
+          </p>
+        </article>
+
+        <article class="info-card reveal">
+          <div class="card-icon">⛽</div>
+          <h3>Petrol, diesel and LPG</h3>
+          <p>
+            Explore the three fuel types represented in the project and
+            compare their pricing patterns through Tableau.
+          </p>
+        </article>
+
+        <article class="info-card reveal">
+          <div class="card-icon">📈</div>
+          <h3>Taxation and trends</h3>
+          <p>
+            Investigate tax-price relationships over time. Taxes are one
+            influence among several, including supply costs and subsidies.
+          </p>
+        </article>
+      </div>
+
+      <div class="stats">
+        <div class="stat reveal">
+          <strong>2020–2026</strong>
+          <span>Project time period</span>
+        </div>
+        <div class="stat reveal">
+          <strong>3 fuel types</strong>
+          <span>Petrol · Diesel · LPG</span>
+        </div>
+        <div class="stat reveal">
+          <strong>Interactive</strong>
+          <span>Dashboard and three stories</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="dashboard">
+    <div class="wrap">
+      <div class="section-heading reveal">
+        <span class="section-tag">Explore the data</span>
+        <h2>Global fuel dashboard</h2>
+        <p>
+          Explore your published Tableau dashboard with its original charts,
+          filters and country comparisons.
+        </p>
+      </div>
+
+      <div class="tableau-panel reveal">
+        <div class="panel-heading">
+          <div>
+            <h3>Global Fuel Prices and Taxation Trends (2020–2026)</h3>
+            <p>Interactive Tableau dashboard</p>
+          </div>
+
+          <a class="btn btn-secondary"
+             href="https://public.tableau.com/views/GlobalfuelpricesDashboard/GlobalFuelPricesandTaxationTrends20202026?:showVizHome=no"
+             target="_blank" rel="noopener">Open on Tableau ↗</a>
+        </div>
+
+        <div class="tableau-frame">
+          <iframe
+            title="Global Fuel Prices and Taxation Trends Tableau Dashboard"
+            src="https://public.tableau.com/views/GlobalfuelpricesDashboard/GlobalFuelPricesandTaxationTrends20202026?:showVizHome=no&amp;:embed=true&amp;:toolbar=yes&amp;:tabs=no"
+            loading="lazy"
+            allowfullscreen></iframe>
+        </div>
+
+        <p class="tableau-note">
+          The dashboard is embedded from Tableau Public. Its interactive
+          filters are available inside the visualization.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="stories">
+    <div class="wrap">
+      <div class="section-heading reveal">
+        <span class="section-tag">Interactive storytelling</span>
+        <h2>One dataset. Three perspectives.</h2>
+        <p>
+          Choose a story to view the corresponding published Tableau
+          visualization. Each story retains its own original Tableau link.
+        </p>
+      </div>
+
+      <div class="story-tabs reveal" role="tablist"
+           aria-label="Choose a Tableau story">
+        <button class="story-tab active" type="button"
+                role="tab" aria-selected="true"
+                aria-controls="story0" data-story="0">
+          <strong>01 · Energy policy</strong>
+          <span>Dr. Sarah Mitchell</span>
+        </button>
+
+        <button class="story-tab" type="button"
+                role="tab" aria-selected="false"
+                aria-controls="story1" data-story="1">
+          <strong>02 · Global supply chain</strong>
+          <span>Marcus Thompson</span>
+        </button>
+
+        <button class="story-tab" type="button"
+                role="tab" aria-selected="false"
+                aria-controls="story2" data-story="2">
+          <strong>03 · Energy economics</strong>
+          <span>Professor Elena Rodriguez</span>
+        </button>
+      </div>
+
+      <article class="story-panel reveal" id="story0" role="tabpanel">
+        <div class="story-header">
+          <div>
+            <h3>Story 1: Dr. Sarah Mitchell</h3>
+            <p>Energy Policy Consultant · Fuel prices and taxation</p>
+          </div>
+          <a class="btn btn-secondary"
+             href="https://public.tableau.com/views/GlobalfuelpricesStory1/Story1Dr_SarahMitchellEnergyPolicyConsultant?:showVizHome=no"
+             target="_blank" rel="noopener">Open story ↗</a>
+        </div>
+
+        <div class="tableau-frame story-frame">
+          <iframe
+            title="Tableau Story 1: Dr. Sarah Mitchell, Energy Policy Consultant"
+            src="https://public.tableau.com/views/GlobalfuelpricesStory1/Story1Dr_SarahMitchellEnergyPolicyConsultant?:showVizHome=no&amp;:embed=true&amp;:toolbar=yes&amp;:tabs=no"
+            loading="lazy" allowfullscreen></iframe>
+        </div>
+      </article>
+
+      <article class="story-panel reveal" id="story1"
+               role="tabpanel" hidden>
+        <div class="story-header">
+          <div>
+            <h3>Story 2: Marcus Thompson</h3>
+            <p>Global Supply Chain Manager · Supply-chain perspective</p>
+          </div>
+          <a class="btn btn-secondary"
+             href="https://public.tableau.com/views/GlobalfuelpricesStory2/Story2MarcusThompsonGlobalSupplyChainManager?:showVizHome=no"
+             target="_blank" rel="noopener">Open story ↗</a>
+        </div>
+
+        <div class="tableau-frame story-frame">
+          <iframe
+            title="Tableau Story 2: Marcus Thompson, Global Supply Chain Manager"
+            data-src="https://public.tableau.com/views/GlobalfuelpricesStory2/Story2MarcusThompsonGlobalSupplyChainManager?:showVizHome=no&amp;:embed=true&amp;:toolbar=yes&amp;:tabs=no"
+            loading="lazy" allowfullscreen></iframe>
+        </div>
+      </article>
+
+      <article class="story-panel reveal" id="story2"
+               role="tabpanel" hidden>
+        <div class="story-header">
+          <div>
+            <h3>Story 3: Professor Elena Rodriguez</h3>
+            <p>Energy Economics Researcher · Economic perspective</p>
+          </div>
+          <a class="btn btn-secondary"
+             href="https://public.tableau.com/views/Globalfuelprices/Story3ProfessorElenaRodriguezEnergyEconomicsResearcher?:showVizHome=no"
+             target="_blank" rel="noopener">Open story ↗</a>
+        </div>
+
+        <div class="tableau-frame story-frame">
+          <iframe
+            title="Tableau Story 3: Professor Elena Rodriguez, Energy Economics Researcher"
+            data-src="https://public.tableau.com/views/Globalfuelprices/Story3ProfessorElenaRodriguezEnergyEconomicsResearcher?:showVizHome=no&amp;:embed=true&amp;:toolbar=yes&amp;:tabs=no"
+            loading="lazy" allowfullscreen></iframe>
+        </div>
+      </article>
+
+      <p class="tableau-note">
+        If a story does not load, use its Open story link to view it directly
+        on Tableau Public.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© Global Fuel Analytics</span>
+    <span>Built with HTML, CSS, JavaScript, GSAP and Tableau Public</span>
+  </div>
+</footer>
+
+<!-- GSAP animations -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const themeToggle = document.getElementById("themeToggle");
+  const themeIcon = document.getElementById("themeIcon");
+  const themeLabel = document.getElementById("themeLabel");
+  const menuToggle = document.getElementById("menuToggle");
+  const navLinks = document.getElementById("navLinks");
+
+  function updateThemeControls() {
+    const light = root.dataset.theme === "light";
+    themeIcon.textContent = light ? "🌙" : "☀️";
+    themeLabel.textContent = light ? "Dark" : "Light";
+    themeToggle.setAttribute("aria-pressed", String(light));
+    themeToggle.setAttribute(
+      "aria-label",
+      light ? "Switch to dark theme" : "Switch to light theme"
+    );
+    document.querySelector('meta[name="theme-color"]')
+      .setAttribute("content", light ? "#f4f8fc" : "#071525");
+  }
+
+  updateThemeControls();
+
+  themeToggle.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    updateThemeControls();
+
+    try {
+      localStorage.setItem("fuel-theme", next);
+    } catch (_) {}
+  });
+
+  menuToggle.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+    menuToggle.setAttribute(
+      "aria-label",
+      isOpen ? "Close navigation" : "Open navigation"
+    );
+  });
+
+  navLinks.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      menuToggle.setAttribute("aria-expanded", "false");
+    });
+  });
+
+  /* Story tabs: preserve the original Tableau views and load later
+     stories only when the visitor selects their tabs. */
+  const tabs = [...document.querySelectorAll(".story-tab")];
+  const panels = [...document.querySelectorAll(".story-panel")];
+
+  function activateStory(selected) {
+    tabs.forEach((tab, index) => {
+      const active = index === selected;
+      tab.classList.toggle("active", active);
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+    });
+
+    panels.forEach((panel, index) => {
+      const active = index === selected;
+      panel.hidden = !active;
+
+      const iframe = panel.querySelector("iframe[data-src]");
+      if (active && iframe && !iframe.getAttribute("src")) {
+        iframe.setAttribute("src", iframe.dataset.src);
+      }
+    });
+
+    /* Animate the newly selected story when GSAP is available. */
+    if (window.gsap && !window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches) {
+      const panel = panels[selected];
+      gsap.fromTo(panel,
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: .4, ease: "power2.out" }
+      );
+    }
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => activateStory(index));
+    tab.addEventListener("keydown", event => {
+      let next = index;
+
+      if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+      else if (event.key === "ArrowLeft") {
+        next = (index - 1 + tabs.length) % tabs.length;
+      } else {
+        return;
+      }
+
+      event.preventDefault();
+      activateStory(next);
+      tabs[next].focus();
+    });
+  });
+
+  /* GSAP progressive enhancement. The site remains readable if GSAP
+     cannot load or reduced motion is enabled. */
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  if (window.gsap && window.ScrollTrigger && !reduceMotion) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from(".hero-anim", {
+      opacity: 0,
+      y: 28,
+      duration: .85,
+      stagger: .14,
+      ease: "power3.out",
+      delay: .12,
+      clearProps: "all"
+    });
+
+    gsap.utils.toArray(".reveal").forEach(element => {
+      gsap.from(element, {
+        opacity: 0,
+        y: 26,
+        duration: .75,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: element,
+          start: "top 88%",
+          once: true
+        }
+      });
+    });
+
+    gsap.utils.toArray(".info-card").forEach(card => {
+      card.addEventListener("mouseenter", () => {
+        gsap.to(card, { y: -5, duration: .22, overwrite: true });
+      });
+
+      card.addEventListener("mouseleave", () => {
+        gsap.to(card, { y: 0, duration: .22, overwrite: true });
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -2,97 +2,138 @@
 
 ## 📌 Project Overview
 
-The **Global Fuel Prices and Taxation Trends (2020–2026)** project analyses fuel prices across different countries using Tableau. It focuses on petrol, diesel, and LPG prices, crude oil prices, taxation, government subsidies, and regional differences.
+The **Global Fuel Prices and Taxation Trends (2020–2026)** project analyzes fuel prices and taxation patterns across countries and regions using Tableau.
 
-The project uses interactive dashboards, maps, charts, and Tableau stories to make global fuel price data easier to understand and compare.
+The project explores petrol, diesel, and LPG prices, crude oil prices, taxation, income levels, and government subsidy levels. Interactive visualizations and Tableau stories help users understand global fuel-price trends and compare differences between countries.
 
 ## 🎯 Objectives
 
-- Analyse fuel price trends from 2020 to 2026.
-- Compare petrol and diesel prices across countries.
-- Explore LPG and Brent crude oil price trends.
-- Compare fuel taxation across countries and regions.
-- Examine the relationship between fuel prices and subsidy levels.
-- Present insights through interactive Tableau dashboards and stories.
+- Analyze global fuel-price trends from 2020 to 2026.
+- Compare petrol, diesel, and LPG prices.
+- Study differences in fuel taxation across countries and regions.
+- Explore the relationship between fuel prices and subsidy levels.
+- Compare fuel taxation across different income levels.
+- Present insights through an interactive Tableau dashboard and stories.
+
+## 📊 Dataset Information
+
+The project uses the **Global Fuel Prices Dataset**.
+
+The dataset includes the following types of information:
+
+- Country and region
+- Year
+- Petrol prices
+- Diesel prices
+- LPG prices
+- Brent crude oil prices
+- Fuel tax percentages
+- Income levels
+- Subsidy levels
+
+The dataset covers the period from 2020 to 2026. Please refer to the original dataset documentation for its exact source and definitions.
 
 ## 🛠️ Tools and Technologies
 
-- **Tableau Desktop** — Data analysis and visualisation.
-- **Tableau Public** — Publishing interactive dashboards and stories.
-- **Dataset:** Global Fuel Prices Dataset.
-- **GitHub** — Project documentation and sharing.
+- **Tableau Desktop** — Data visualization and dashboard development
+- **Tableau Public** — Publishing and sharing dashboards
+- **Microsoft Excel / CSV** — Dataset handling and preparation
+- **GitHub** — Project documentation and sharing
+- **Google Drive** — Project demonstration video
 
-## 📊 Main Dashboard
+## 📈 Main Tableau Dashboard
 
-Explore the interactive dashboard to compare fuel prices, taxes, and trends.
+Explore the interactive dashboard:
 
-🔗 **[View Main Tableau Dashboard](https://public.tableau.com/views/GlobalfuelpricesDashboard/GlobalFuelPricesandTaxationTrends20202026?:showVizHome=no)**
+🔗 [**Global Fuel Prices and Taxation Trends Dashboard**](https://public.tableau.com/views/GlobalfuelpricesDashboard/GlobalFuelPricesandTaxationTrends20202026?:showVizHome=no)
 
-The dashboard includes:
-- Average fuel price summary cards.
-- Petrol, diesel, LPG, and Brent crude price trends.
-- Average tax percentage by global region.
-- Fuel price comparisons among selected countries.
-- Highest-tax-paying countries.
-- World maps showing petrol and diesel prices.
+The dashboard presents key performance indicators, yearly fuel-price trends, and comparisons between countries and regions.
+
+### Dashboard Highlights
+
+- Average petrol, diesel, and LPG prices
+- Average fuel-tax percentage
+- Annual fuel-price trends from 2020 to 2026
+- Comparisons of fuel prices across countries
+- Fuel taxation and subsidy analysis
 
 ## 📖 Tableau Stories
 
-### Story 1: Dr. Sarah Mitchell — Energy Policy Consultant
+### 1. Dr. Sarah Mitchell — Energy Policy Consultant
 
-🔗 **[View Story 1](https://public.tableau.com/views/GlobalfuelpricesStory1/Story1Dr_SarahMitchellEnergyPolicyConsultant?:showVizHome=no)**
+🔗 [**Explore Story 1**](https://public.tableau.com/views/GlobalfuelpricesStory1/Story1Dr_SarahMitchellEnergyPolicyConsultant?:showVizHome=no)
 
-This story explores petrol and diesel prices by country, regional taxation, and differences in fuel prices across subsidy levels.
+This story focuses on fuel taxation, regional differences, and government subsidies.
 
-### Story 2: Marcus Thompson — Global Supply Chain Manager
+**Key areas:**
+- Petrol and diesel prices across countries
+- Average fuel taxes by global region
+- Subsidy levels compared with fuel prices
 
-🔗 **[View Story 2](https://public.tableau.com/views/GlobalfuelpricesStory2/Story2MarcusThompsonGlobalSupplyChainManager?:showVizHome=no)**
+### 2. Marcus Thompson — Global Supply Chain Manager
 
-This story focuses on changes in petrol, diesel, and Brent crude prices over time. It also compares fuel prices among selected countries to support an understanding of fuel market trends.
+🔗 [**Explore Story 2**](https://public.tableau.com/views/GlobalfuelpricesStory2/Story2MarcusThompsonGlobalSupplyChainManager?:showVizHome=no)
 
-### Story 3: Professor Elena Rodriguez — Energy Economics Researcher
+This story examines fuel-price changes that may be relevant to transportation and supply-chain planning.
 
-This story examines taxation across income levels, tax differences across subsidy categories, and fuel prices at different subsidy levels.
+**Key areas:**
+- Annual petrol and diesel price trends
+- Brent crude oil price trends
+- Comparison of the top three countries by fuel price
 
-🔗 **[View Story 3](https://public.tableau.com/views/GlobalfuelpricesDashboard/GlobalFuelPricesandTaxationTrends20202026?:showVizHome=no)**
+### 3. Professor Elena Rodriguez — Energy Economics Researcher
 
-*Note: Replace this link if Story 3 has its own separately published Tableau URL.*
+This story explores fuel taxation and subsidies across different economic groups.
+
+**Key areas:**
+- Fuel taxation across income levels
+- Subsidy levels compared with tax percentages
+- Fuel prices and subsidy categories
+
+🔗 **Story 3 link:** Add the published Tableau URL for this story here.
+
+*Note: Replace this placeholder with the actual Story 3 URL if it has been published separately.*
 
 ## 🎥 Project Demonstration Video
 
-Watch the project presentation to learn about the problem statement, dataset, data preparation, dashboard, Tableau stories, and key findings.
+Watch the project presentation to learn about the problem statement, dataset, data preparation, Tableau dashboard, stories, and key findings.
 
-🔗 **[Watch Project Demonstration Video on Google Drive](https://drive.google.com/file/d/13k0qQW8OqvyIrE3yCzAym5SUTmQNd0qu/view)**
+🔗 [**Watch Project Demonstration Video on Google Drive**](https://drive.google.com/file/d/18aU7h8SqC9MxPBQhzQewOzig7wFmniYw/view?usp=drive_link)
+
+*If the video does not open, check that Google Drive sharing is set to “Anyone with the link — Viewer.”*
 
 ## 🔍 Key Findings
 
-The dashboard allows users to explore:
+The following observations are based on the values displayed in the dashboard and should be interpreted in the context of the dataset.
 
-- Changes in average petrol and diesel prices between 2020 and 2026.
-- Trends in Brent crude oil and LPG prices.
-- Differences in fuel taxation across countries and regions.
-- Comparisons between fuel prices and subsidy categories.
-- Variations in fuel prices among selected countries.
+- The displayed average petrol price is approximately **2.282**.
+- The displayed average diesel price is approximately **2.134**.
+- The displayed average LPG price is approximately **1.711**.
+- The displayed average fuel-tax percentage is approximately **26.77%**.
+- The dashboard shows changes in petrol, diesel, and Brent crude oil prices over the 2020–2026 period.
 
-The results should be interpreted using the values and patterns displayed in the Tableau visualisations. Relationships between variables do not necessarily prove cause and effect.
+*Note: Confirm the dataset's currency, price units, aggregation method, and final chart values before using these findings in formal reporting. These comparisons do not by themselves establish causation.*
 
 ## 💡 Learning Outcomes
 
 Through this project, I learned how to:
 
 - Work with a dataset for data analysis.
-- Prepare and check data before visualisation.
-- Create charts, geographical maps, and interactive dashboards.
-- Build Tableau stories to explain findings.
-- Present analytical results in a clear and understandable way.
-- Publish and share a data analytics project online.
+- Prepare data for visualization.
+- Create charts and calculated measures in Tableau.
+- Design an interactive dashboard.
+- Build Tableau stories for different audiences.
+- Communicate findings using data visualizations.
+- Publish and document a project online.
 
 ## 🚀 How to Explore the Project
 
 1. Open the main Tableau dashboard using the link above.
-2. Explore the charts, maps, and available filters.
-3. Open each Tableau story to understand the different analytical perspectives.
-4. Watch the project demonstration video for a walkthrough.
+2. Explore the charts and available filters.
+3. Open Story 1 to explore taxation and subsidy analysis.
+4. Open Story 2 to explore fuel-price trends.
+5. Open Story 3 after adding its published link.
+6. Watch the demonstration video for a guided presentation.
 
 ## 👨‍💻 Author
 
@@ -101,6 +142,6 @@ Through this project, I learned how to:
 B.Tech Computer Science and Engineering  
 Medi-Caps University
 
-## 📄 License
+## 📄 License and Usage
 
-This project is intended for educational and learning purposes. Please check the dataset's original licence and terms before reusing or redistributing the data.
+This project is intended for educational and analytical purposes. Please check the original dataset's license and terms before redistributing the data or using it for other purposes.
